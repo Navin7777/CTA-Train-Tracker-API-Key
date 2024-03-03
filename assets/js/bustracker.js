@@ -1,31 +1,27 @@
-var proxyUrl =   "https://cors-anywhere.herokuapp.com/";
+var proxyUrl = "https://cors-anywhere.herokuapp.com/";
 var token = "?key=6pAh8tTMx7TBtdEV5hpEbZTWb&format=json";
-var apiRoot = "http://www.ctabustracker.com/bustime/api/v2/";
+var apiRoot = "http://www.ctabustracker.com/bustime/api/v2/"
 var getRoutesEnpoint = apiRoot + "getroutes" + token;
-var getVehiclesEndpoint = apiRoot + "getvehicles" + token + "&vid=1295&tmres=s&format=json";
+var getVehiclesEndpoint = apiRoot + "getvehicles" + token;
 
 var BusTrackerVM = can.DefineMap.extend({
   title: {
-   value:"Chicago CTA Bus Tracker by Val Illia"
+   value:"Chicago CTA Bus Tracker By Illia Val"
   },
   routesPromise: {
     value() {
-      return fetch(proxyUrl + getRoutesEnpoint, {
-          method: 'GET',
-          mode: 'no-cors'
-      })
-        .then(response => response.json())
-        .then(data => data["bustime-response"].routes);
+      return fetch(proxyUrl + getRoutesEnpoint , {
+  method: "GET",
+  headers: {"Content-type": "application/json;charset=UTF-8"}
+}).then(response => response.json())
+     .then(data => data["bustime-response"].routes);
   }
  },
  route: 'any',
  vehiclesPromise: 'any',
  pickRoute(route) {
    this.route = route;
-   this.vehiclesPromise = fetch(proxyUrl + getVehiclesEndpoint + "&rt=" + route.rt, {
-       method: 'GET',
-       mode: 'no-cors'
-   })
+   this.vehiclesPromise = fetch(proxyUrl + getVehiclesEndpoint + "&rt=" + route.rt)
      .then(response => response.json())
      .then(data => {
        if (data["bustime-response"].error) {
@@ -68,7 +64,7 @@ can.Component.extend({
     "{element} inserted": function() {
       googleAPI.then(() => {
         this.viewModel.map = new google.maps.Map(this.element.firstChild, {
-         zoom: 10,
+         zoom: 11,
          center: {
            lat: 41.881,
            lng: -87.623
